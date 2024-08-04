@@ -13,7 +13,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(45deg, #000, #000, #1c4018);
+            background: linear-gradient(45deg, #000, #000, #000);
             background-size: 400% 400%;
             animation: gradientAnimation 10s ease infinite;
             color: #f33c3c;
@@ -61,19 +61,27 @@
 </head>
 <body>
     <div>
-        <h1>#Freedom</h1>
+        <h1>#FreeBangladesh</h1>
         <p>Number of clicks: <span id="counter">0</span></p>
         <button onclick="incrementCount()">Click me!</button>
     </div>
 
     <script>
-        // Initialize counter variable
-        let count = 0;
+        async function fetchCount() {
+            const response = await fetch('/api/get-count');
+            const data = await response.json();
+            document.getElementById("counter").innerText = data.count;
+        }
 
-        // Function to increment count and update display
-        function incrementCount() {
-            count++; // Increase count by 1
-            document.getElementById("counter").innerText = count; // Update the display
+        async function incrementCount() {
+            const response = await fetch('/api/increment-count', {
+                method: 'POST'
+            });
+            const data = await response.json();
+            document.getElementById("counter").innerText = data.count;
+        }
+
+        window.onload = fetchCount;
         }
     </script>
 </body>
