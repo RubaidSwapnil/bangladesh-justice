@@ -65,42 +65,42 @@
         <p>Number of clicks: <span id="counter">0</span></p>
         <button onclick="incrementCount()">Click me!</button>
     </div>
-<!-- Include Supabase JavaScript library -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/supabase.min.js"></script>
+<!-- Include Firebase JavaScript SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js"></script>
+
     <script>
-        // Supabase client setup
-        const SUPABASE_URL = 'https://bomjcqdnboyjsvmaoabc.supabase.co'; // Replace with your Supabase URL
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJvbWpjcWRuYm95anN2bWFvYWJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjI3NDkxMzcsImV4cCI6MjAzODMyNTEzN30._CPvfM5mbCYkh2kqxPmlGhyDDFktCePz_oBL3m_AhFo'; // Replace with your Supabase key
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
 
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const countRef = database.ref('click_count');
 
-        // Fetch the current count from Supabase
+        // Fetch the current count from Firebase
         async function fetchCount() {
             try {
-                const { data, error } = await supabase
-                    .from('click_count')
-                    .select('count')
-                    .single();
-
-                if (error) throw error;
-
-                document.getElementById("counter").innerText = data.count;
+                const snapshot = await countRef.once('value');
+                const count = snapshot.val();
+                document.getElementById("counter").innerText = count || 0;
             } catch (error) {
                 console.error('Error fetching count:', error);
             }
         }
 
-        // Increment the count in Supabase
+        // Increment the count in Firebase
         async function incrementCount() {
             try {
-                const { error } = await supabase
-                    .from('click_count')
-                    .update({ count: supabase.raw('count + 1') })
-                    .single();
-
-                if (error) throw error;
-
-                // Fetch the updated count
+                await countRef.transaction(count => (count || 0) + 1);
                 fetchCount();
             } catch (error) {
                 console.error('Error updating count:', error);
