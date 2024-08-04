@@ -70,11 +70,11 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/supabase.min.js"></script>
     <script>
         // Supabase client setup
-        const SUPABASE_URL = 'https://bomjcqdnboyjsvmaoabc.supabase.co'; // Replace with your Supabase URL
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJvbWpjcWRuYm95anN2bWFvYWJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjI3NDkxMzcsImV4cCI6MjAzODMyNTEzN30._CPvfM5mbCYkh2kqxPmlGhyDDFktCePz_oBL3m_AhFo'; // Replace with your Supabase key
+        import { createClient } from '@supabase/supabase-js'
 
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
+const supabaseUrl = 'https://bomjcqdnboyjsvmaoabc.supabase.co'
+const supabaseKey = process.env.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJvbWpjcWRuYm95anN2bWFvYWJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjI3NDkxMzcsImV4cCI6MjAzODMyNTEzN30._CPvfM5mbCYkh2kqxPmlGhyDDFktCePz_oBL3m_AhFo
+const supabase = createClient(supabaseUrl, supabaseKey)
         // Fetch the current count from Supabase
         async function fetchCount() {
     try {
