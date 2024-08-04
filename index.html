@@ -66,13 +66,14 @@
         <button onclick="incrementCount()">Click me!</button>
     </div>
 
+    <!-- Include Supabase JavaScript library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/supabase.min.js"></script>
     <script>
-          // Supabase client setup
+        // Supabase client setup
         const SUPABASE_URL = 'https://bomjcqdnboyjsvmaoabc.supabase.co'; // Replace with your Supabase URL
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJvbWpjcWRuYm95anN2bWFvYWJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjI3NDkxMzcsImV4cCI6MjAzODMyNTEzN30._CPvfM5mbCYkh2kqxPmlGhyDDFktCePz_oBL3m_AhFo'; // Replace with your Supabase key
-        const { createClient } = window['@supabase/supabase-js'];
 
-        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         // Fetch the current count from Supabase
         async function fetchCount() {
@@ -93,19 +94,12 @@
         // Increment the count in Supabase
         async function incrementCount() {
             try {
-                const { error } = await supabase
+                const { data, error } = await supabase
                     .from('click_count')
                     .update({ count: supabase.raw('count + 1') })
                     .single();
 
                 if (error) throw error;
-
-                const { data, error: fetchError } = await supabase
-                    .from('click_count')
-                    .select('count')
-                    .single();
-
-                if (fetchError) throw fetchError;
 
                 document.getElementById("counter").innerText = data.count;
             } catch (error) {
@@ -116,7 +110,5 @@
         // Initialize by fetching the current count
         window.onload = fetchCount;
     </script>
-     <!-- Include Supabase JavaScript library -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/supabase.min.js"></script>
 </body>
 </html>
