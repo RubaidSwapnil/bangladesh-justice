@@ -77,36 +77,37 @@
 
         // Fetch the current count from Supabase
         async function fetchCount() {
-            try {
-                const { data, error } = await supabase
-                    .from('click_count')
-                    .select('count')
-                    .single();
+    try {
+        const { data, error } = await supabase
+            .from('click_count')
+            .select('count')
+            .single();
 
-                if (error) throw error;
+        if (error) throw error;
 
-                document.getElementById("counter").innerText = data.count;
-            } catch (error) {
-                console.error('Error fetching count:', error);
-            }
-        }
+        document.getElementById("counter").innerText = data.count;
+    } catch (error) {
+        console.error('Error fetching count:', error);
+    }
+}
+
 
         // Increment the count in Supabase
-        async function incrementCount() {
-            try {
-                const { data, error } = await supabase
-                    .from('click_count')
-                    .update({ count: supabase.raw('count + 1') })
-                    .single();
+       async function incrementCount() {
+    try {
+        const { error } = await supabase
+            .from('click_count')
+            .update({ count: supabase.raw('count + 1') })
+            .single();
 
-                if (error) throw error;
+        if (error) throw error;
 
-                document.getElementById("counter").innerText = data.count;
-            } catch (error) {
-                console.error('Error updating count:', error);
-            }
-        }
-
+        // Fetch the updated count
+        fetchCount();
+    } catch (error) {
+        console.error('Error updating count:', error);
+    }
+}
         // Initialize by fetching the current count
         window.onload = fetchCount;
     </script>
